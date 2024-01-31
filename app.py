@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import requests
 
 app = Flask(__name__)
@@ -17,6 +17,12 @@ def filter_books(books, criteria):
         if match:
             filtered_books.append(book)
     return filtered_books
+
+# Render search page
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # Endpoint to return book information filtered by specified criteria
 @app.route('/books', methods=['GET'])
@@ -46,4 +52,4 @@ def get_books_by_criteria():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
