@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request, render_template
 import requests
+import os
 
 app = Flask(__name__)
 
-BOOK_INFO_URL = "http://book-api-server-avd123.hue0hefkamekfha3.uksouth.azurecontainer.io:5000/books"
-
+BOOK_KEY = os.getenv("BOOK_INFO_URL")
 
 # Function to filter books by criteria <author, genre, id, publication,title>
 def filter_books(books, criteria):
@@ -35,12 +35,11 @@ def get_books_by_criteria():
     print("Query Parameters:", query_params)
 
     try:
-        if not query_params:  # Check if no criteria are provided
-            # If no criteria are provided, you can make a request to retrieve all books
-            response = requests.get(BOOK_INFO_URL)
+        if not query_params:
+            response = requests.get(BOOK_KEY)
         else:
             # Forward the query parameters to the first service
-            response = requests.get(BOOK_INFO_URL, params=query_params)
+            response = requests.get(BOOK_KEY, params=query_params)
 
         if response.status_code == 200:
             response_data = response.json()
